@@ -14,6 +14,7 @@ import qualified Data.ByteString.Lazy as L
 import qualified Network.HTTP.Simple as S
 import qualified Control.Monad.Random as R
 import qualified Data.Aeson as A
+import Data.Maybe (fromJust, isJust)
 import Data.Text (Text, splitOn, append, unpack)
 import Data.String.Conversions (cs)
 import Prelude hiding (lookup)
@@ -65,10 +66,8 @@ getTagsByName tagName = concatMap branch . getChildren
 
 getTagsIn tagName lookupFunc = 
   extractValues . onlySuccess . map lookupFunc . getTagsByName tagName
-  where onlySuccess = filter isJust
-        extractValues = map (\(Just v) -> v)
-        isJust (Just _) = True
-        isJust _ = False
+    where onlySuccess = filter isJust
+          extractValues = map fromJust
 
 getAttribute attrName = lookup attrName . X.elementAttributes
 
