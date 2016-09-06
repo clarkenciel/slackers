@@ -14,7 +14,7 @@ import Data.Aeson
 -- | wrapping Text in a newtype
 -- this will get us the encoding/decoding JSON features
 -- and the wrapper disappears at runtime
-newtype GifTitle = GifTitle { t :: Text }
+newtype GifTitle = GifTitle Text
   deriving (Show, Generic)
 
 instance ToJSON GifTitle
@@ -48,5 +48,5 @@ chooseRandom gifs = do
   return $ gifs ! idx
 
 gifToSlack :: Gif -> Value
-gifToSlack Gif{..} = object [ "attachments" .= [ object [ "text" .= t title
+gifToSlack Gif{..} = object [ "attachments" .= [ object [ "text" .= title
                                                        , "image_url" .= awslink ] ] ]
