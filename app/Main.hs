@@ -17,7 +17,6 @@ main :: IO ()
 main = do
   port <- getPortNumber
   safeTokens <- getSafeTokens
-  print safeTokens
   let missingTokens = appList \\ keysSet safeTokens
    in if not (null missingTokens)
          then missingTokensError missingTokens

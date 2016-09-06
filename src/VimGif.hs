@@ -2,18 +2,14 @@
 
 module VimGif (serveRandomVimGif) where
 
-import SlackTypes
-
 import qualified Data.ByteString.Lazy as L
 import qualified Network.HTTP.Simple as S
 import Data.Text (Text, pack)
 import Data.Maybe (fromMaybe)
 import Control.Monad.Random (MonadRandom, getRandomR)
-import Data.Aeson 
-  ( FromJSON, ToJSON, Value(Number, String)
-  , decode, encode, parseJSON)
 import GHC.Generics (Generic)
 import Data.Vector (Vector(..), (!), fromList)
+import Data.Aeson 
 
 -- | wrapping Text in a newtype
 -- this will get us the encoding/decoding JSON features
@@ -39,7 +35,7 @@ instance ToJSON Gif
 
 type GifList = Vector Gif
 
-serveRandomVimGif :: IO SlackMessage
+serveRandomVimGif :: IO Value
 serveRandomVimGif = gifToSlack <$> (getGifs >>= chooseRandom)
 
 getGifs :: IO GifList
@@ -51,5 +47,6 @@ chooseRandom gifs = do
   idx <- getRandomR (0, length gifs - 1)
   return $ gifs ! idx
 
-gifToSlack :: Gif -> SlackMessage
-gifToSlack Gif{..} = basicMessage (t title) +: imgAttachment awslink
+gifToSlack :: Gif -> Value
+gifToSlack Gif{..} = object [ "attachments" .= [ object [ "text" .= t title
+                                                       , "image_url" .= awslink ] ] ]
