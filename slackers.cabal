@@ -17,6 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Lib
                      , VimGif
+                     , SlackTypes
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , text
@@ -25,6 +26,7 @@ library
                      , html-conduit
                      , xml-conduit
                      , containers
+                     , vector
                      , MonadRandom
                      , string-conversions
   default-language:    Haskell2010
