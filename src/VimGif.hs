@@ -48,5 +48,6 @@ chooseRandom gifs = do
   return $ gifs ! idx
 
 gifToSlack :: Gif -> Value
-gifToSlack Gif{..} = object [ "attachments" .= [ object [ "text" .= title
+gifToSlack Gif{..} = object [ "response_type" .= pack "in_channel"
+                           , "attachments" .= [ object [ "text" .= title
                                                        , "image_url" .= awslink ] ] ]
